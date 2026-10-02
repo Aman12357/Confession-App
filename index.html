@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confession & Proposal Website Maker 💌✨</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Outfit:wght@300;400;500;600;700&family=Sacramento&display=swap" rel="stylesheet">
+
+  <!-- JSZip for 1-Click ZIP Exporter -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css?v=50">
+</head>
+<body>
+
+  <!-- Floating Particles & Fireworks Canvases -->
+  <canvas id="bgCanvas"></canvas>
+  <canvas id="fireworksCanvas"></canvas>
+
+  <!-- Background Ambient Audio -->
+  <audio id="bgAudio" loop preload="auto">
+    <source src="https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-493.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- ==========================================================================
+       VIEW 1: CREATOR ONBOARDING WIZARD FORM (First Visit / No Link Parameters)
+       ========================================================================== -->
+  <div id="creatorView" class="view-wrapper">
+    <div class="creator-container glass-panel">
+      
+      <div class="creator-header">
+        <span class="badge-tag">✨ Romantic Website Generator</span>
+        <h1>Create a Custom Confession Website</h1>
+        <p class="subtitle">Fill in the details below to generate a live romantic website & unique link for your crush!</p>
+      </div>
+
+      <!-- Step Progress Bar -->
+      <div class="wizard-steps">
+        <div class="step-item active" data-step="1">
+          <span class="step-num">1</span>
+          <span class="step-name">Names</span>
+        </div>
+        <div class="step-item" data-step="2">
+          <span class="step-num">2</span>
+          <span class="step-name">Date & Question</span>
+        </div>
+        <div class="step-item" data-step="3">
+          <span class="step-num">3</span>
+          <span class="step-name">Letter</span>
+        </div>
+        <div class="step-item" data-step="4">
+          <span class="step-num">4</span>
+          <span class="step-name">Photos</span>
+        </div>
+        <div class="step-item" data-step="5">
+          <span class="step-num">5</span>
+          <span class="step-name">Finish</span>
+        </div>
+      </div>
+
+      <form id="wizardForm" onsubmit="return false;">
+        
+        <!-- STEP 1: NAMES -->
+        <div class="form-step-page active" data-step="1">
+          <h3>💕 Step 1: Who is this for?</h3>
+
+          <div class="form-group">
+            <label>Crush / Partner's Name *</label>
+            <input type="text" id="partnerName" placeholder="e.g. Alex, Sophia, Emma..." required>
+          </div>
+
+          <div class="form-group">
+            <label>Your Name / Nickname *</label>
+            <input type="text" id="senderName" placeholder="e.g. Sam, Chris, Yours Truly..." required>
+          </div>
+
+          <div class="step-nav-buttons">
+            <div></div>
+            <button type="button" class="gradient-btn next-step-btn" data-next="2">Next Step →</button>
+          </div>
+        </div>
+
+        <!-- STEP 2: DATE & PROPOSAL QUESTION -->
+        <div class="form-step-page" data-step="2">
+          <h3>📅 Step 2: Special Date & Proposal</h3>
+
+          <div class="form-group">
+            <label>First Met / Together Date (For Live Counter Timer) *</label>
+            <input type="date" id="firstMetDate" required>
+          </div>
+
+          <div class="form-group">
+            <label>Proposal Question *</label>
+            <input type="text" id="proposalQuestion" placeholder="e.g. Will you spend the rest of your life with me?" required>
+          </div>
+
+          <div class="form-group">
+            <label>Date Planner Title (After Proposal Acceptance)</label>
+            <input type="text" id="dateHeader" placeholder="e.g. Now... Let's Plan Another Unforgettable Day Together! 🎟️">
+          </div>
+
+          <div class="step-nav-buttons">
+            <button type="button" class="glass-btn prev-step-btn" data-prev="1">← Back</button>
+            <button type="button" class="gradient-btn next-step-btn" data-next="3">Next Step →</button>
+          </div>
+        </div>
+
+        <!-- STEP 3: CONFESSION LETTER -->
+        <div class="form-step-page" data-step="3">
+          <h3>📜 Step 3: Your Heartfelt Letter</h3>
+
+          <div class="form-group">
+            <label>Letter Title</label>
+            <input type="text" id="letterTitle" placeholder="e.g. Written in the Stars ✨">
+          </div>
+
+          <div class="form-group">
+            <label>Confession Letter Body *</label>
+            <textarea id="letterBody" rows="6" placeholder="Write your heartfelt confession letter here..." required></textarea>
+          </div>
+
+          <div class="step-nav-buttons">
+            <button type="button" class="glass-btn prev-step-btn" data-prev="2">← Back</button>
+            <button type="button" class="gradient-btn next-step-btn" data-next="4">Next Step →</button>
+          </div>
+        </div>
+
+        <!-- STEP 4: PHOTOS -->
+        <div class="form-step-page" data-step="4">
+          <h3>📸 Step 4: Memory Photo Gallery</h3>
+          <p class="form-desc">Upload photo files or paste image URLs for the Polaroid Gallery.</p>
+
+          <div class="photo-inputs-grid">
+            <div class="photo-input-card">
+              <label>Photo 1</label>
+              <input type="file" id="filePhoto1" accept="image/*" class="file-photo-input">
+              <input type="text" id="urlPhoto1" placeholder="Or paste image URL">
+              <input type="text" id="capPhoto1" placeholder="Caption 1 (e.g. Our first met ✨)">
+            </div>
+            <div class="photo-input-card">
+              <label>Photo 2</label>
+              <input type="file" id="filePhoto2" accept="image/*" class="file-photo-input">
+              <input type="text" id="urlPhoto2" placeholder="Or paste image URL">
+              <input type="text" id="capPhoto2" placeholder="Caption 2 (e.g. Your beautiful smile 😊)">
+            </div>
+            <div class="photo-input-card">
+              <label>Photo 3</label>
+              <input type="file" id="filePhoto3" accept="image/*" class="file-photo-input">
+              <input type="text" id="urlPhoto3" placeholder="Or paste image URL">
+              <input type="text" id="capPhoto3" placeholder="Caption 3 (e.g. Magical moments 💫)">
+            </div>
+            <div class="photo-input-card">
+              <label>Photo 4</label>
+              <input type="file" id="filePhoto4" accept="image/*" class="file-photo-input">
+              <input type="text" id="urlPhoto4" placeholder="Or paste image URL">
+              <input type="text" id="capPhoto4" placeholder="Caption 4 (e.g. Forever my favorite 💖)">
+            </div>
+          </div>
+
+          <div class="step-nav-buttons">
+            <button type="button" class="glass-btn prev-step-btn" data-prev="3">← Back</button>
+            <button type="button" class="gradient-btn next-step-btn" data-next="5">Next Step →</button>
+          </div>
+        </div>
+
+        <!-- STEP 5: FINISH & GENERATE LINK -->
+        <div class="form-step-page" data-step="5">
+          <h3>🎉 Step 5: Ready to Share!</h3>
+          <p class="form-desc">Your custom website is ready! Preview it live, copy the unique shareable link for your crush, or download a standalone ZIP package.</p>
+
+          <div class="action-buttons-row">
+            <button type="button" id="previewSiteBtn" class="gradient-btn lg">
+              <span>✨ Preview Live Website</span>
+            </button>
+            <button type="button" id="copyShareLinkBtn" class="glass-btn lg">
+              <span>🔗 Copy Unique Shareable Link</span>
+            </button>
+            <button type="button" id="downloadZipBtn" class="glass-btn lg">
+              <span>📦 Download Standalone ZIP</span>
+            </button>
+          </div>
+
+          <div class="step-nav-buttons margin-top">
+            <button type="button" class="glass-btn prev-step-btn" data-prev="4">← Back</button>
+          </div>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+
+  <!-- ==========================================================================
+       VIEW 2: PERSONALIZED ROMANTIC WEBSITE (For Crush / When Shared Link Opened)
+       ========================================================================== -->
+  <div id="crushView" class="view-wrapper hidden">
+    
+    <!-- Floating Audio Control -->
+    <button id="audioToggleBtn" class="floating-audio-btn" title="Toggle Music">
+      <span id="audioIcon">🎵</span>
+    </button>
+
+    <!-- Floating Creator Button -->
+    <button id="floatingCreateBtn" class="floating-create-btn">
+      <span>✨ Make Yours</span>
+    </button>
+
+    <main class="romantic-container">
+      
+      <!-- HERO CARD & LIVE TIMER -->
+      <section class="romantic-section glass-panel text-center">
+        <div class="glow-orb nebula-pink"></div>
+        <div class="glow-orb nebula-gold"></div>
+
+        <span class="badge-tag gold">💖 A Special Message For You</span>
+        <h1 class="main-hero-title">For <span id="crushPartnerName" class="glow-text">Your Name</span></h1>
+        <p class="hero-subtext">"Every moment with you shines brighter than all the stars in the universe."</p>
+
+        <!-- Live Love Timer -->
+        <div class="timer-box">
+          <h4 class="timer-label">Counting Every Second Of Our Togetherness ✨</h4>
+          <div class="timer-grid">
+            <div class="timer-card"><span id="crushYears">0</span><label>Years</label></div>
+            <div class="timer-card"><span id="crushDays">000</span><label>Days</label></div>
+            <div class="timer-card"><span id="crushHours">00</span><label>Hours</label></div>
+            <div class="timer-card"><span id="crushMins">00</span><label>Mins</label></div>
+            <div class="timer-card"><span id="crushSecs">00</span><label>Secs</label></div>
+          </div>
+          <p class="timer-since-text">Since <span id="crushFirstMetDate">Special Date</span> 💖</p>
+        </div>
+      </section>
+
+      <!-- ENVELOPE & LETTER -->
+      <section class="romantic-section glass-panel">
+        <div class="section-title-box text-center">
+          <span class="badge-tag">📜 From The Heart</span>
+          <h2 id="crushLetterTitle">Written in the Stars ✨</h2>
+        </div>
+
+        <div class="envelope-wrapper">
+          <div id="romanticEnvelope" class="space-envelope">
+            <div class="envelope-seal">💌</div>
+            <p class="envelope-prompt">Tap to open letter ✨</p>
+          </div>
+
+          <div id="romanticLetterPaper" class="letter-paper glass-card hidden">
+            <div class="letter-header-decor">✨ 💖 ✨</div>
+            <p id="crushLetterBody" class="letter-body-text"></p>
+            <div class="letter-sig-box">
+              <p>Forever Yours,</p>
+              <h3 id="crushSenderName" class="sig-name">Your Name</h3>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- POLAROID PHOTO GALLERY -->
+      <section class="romantic-section glass-panel">
+        <div class="section-title-box text-center">
+          <span class="badge-tag">📸 Precious Memories</span>
+          <h2>Captured Moments</h2>
+        </div>
+
+        <div id="crushPhotoGrid" class="polaroid-gallery-grid">
+          <!-- Dynamically populated photo cards -->
+        </div>
+      </section>
+
+      <!-- THE PROPOSAL QUESTION -->
+      <section class="romantic-section glass-panel text-center">
+        <div class="proposal-box">
+          <div class="ring-emoji">💍</div>
+          <span class="badge-tag gold">✨ The Eternal Question</span>
+          <h1 id="crushProposalQuestion" class="proposal-question-title">
+            Will you spend the rest of your life with me?
+          </h1>
+
+          <div class="proposal-btn-group">
+            <button id="yesBtn" class="gradient-btn xl glow-pulse">
+              <span>YES! FOREVER 💖</span>
+            </button>
+            <button id="noBtn" class="glass-btn lg">
+              <span>No 🙈</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Success Date Planner -->
+        <div id="successPanel" class="success-panel glass-card hidden">
+          <div class="success-header">
+            <span class="celebrate-emoji">🎉✨🌌</span>
+            <h2>You Made Me The Happiest Person Ever!</h2>
+            <p id="crushDateHeader" class="date-planner-subtitle">
+              Now... Let's Plan Another Unforgettable Day Together! 🎟️
+            </p>
+          </div>
+
+          <div id="crushDateGrid" class="date-ideas-grid">
+            <!-- Dynamically populated date ideas -->
+          </div>
+
+          <button id="confirmDateBtn" class="gradient-btn lg">
+            <span>Lock In Our Dream Date 💖</span>
+          </button>
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast hidden">
+    <span id="toastText">Notification text</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="script.js?v=50"></script>
+</body>
+</html>
