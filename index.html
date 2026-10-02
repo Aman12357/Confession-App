@@ -2,326 +2,322 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Confession & Proposal Website Maker 💌✨</title>
-
-  <!-- Google Fonts -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Confession & Proposal Website Generator 💌✨</title>
+  
+  <!-- Romantic Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Outfit:wght@300;400;500;600;700&family=Sacramento&display=swap" rel="stylesheet">
-
-  <!-- JSZip for 1-Click ZIP Exporter -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+  
+  <!-- JSZip for 1-click Custom Website Export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
-  <!-- Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=50">
+  <link rel="stylesheet" href="style.css?v=60">
 </head>
 <body>
 
-  <!-- Floating Particles & Fireworks Canvases -->
-  <canvas id="bgCanvas"></canvas>
-  <canvas id="fireworksCanvas"></canvas>
+  <!-- Background Canvas Elements -->
+  <canvas id="ambientCanvas"></canvas>
+  <canvas id="confettiCanvas"></canvas>
 
-  <!-- Background Ambient Audio -->
-  <audio id="bgAudio" loop preload="auto">
-    <source src="https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-493.mp3" type="audio/mpeg">
-  </audio>
+  <!-- Audio & Builder Controls Bar -->
+  <div class="audio-controls-bar">
+    <button id="openBuilderBtn" class="builder-toggle-btn" title="Create a customized site for your crush">
+      <span>✨</span> Create Yours
+    </button>
+    <div class="vinyl-widget" id="vinylWidget" title="Romantic Vinyl Player">
+      <div class="vinyl-grooves"></div>
+      <div class="vinyl-center"></div>
+    </div>
+    <button id="audioToggle" class="audio-toggle" title="Toggle Soft Ambient Music" aria-label="Toggle Romantic Music">
+      <span class="music-icon">🎵</span>
+      <span id="musicStatus">Music: Off 🔇</span>
+    </button>
+  </div>
 
-  <!-- ==========================================================================
-       VIEW 1: CREATOR ONBOARDING WIZARD FORM (First Visit / No Link Parameters)
-       ========================================================================== -->
-  <div id="creatorView" class="view-wrapper">
-    <div class="creator-container glass-panel">
+  <!-- Top Romantic Header -->
+  <header class="romantic-header">
+    <h1 class="glow-title" id="mainTitle">For My Love ❤️</h1>
+    <p class="subtitle" id="subTitle">A special message, straight from the heart ✨</p>
+  </header>
+
+  <!-- Main Container -->
+  <main class="stage-container">
+    
+    <!-- STAGE 1: 3D Wax-Sealed Envelope -->
+    <section class="envelope-section" id="envelopeSection">
+      <div class="envelope-wrapper">
+        <div class="envelope" id="envelope">
+          <div class="flap-top"></div>
+          <div class="pocket-left"></div>
+          <div class="pocket-right"></div>
+          <div class="pocket-bottom"></div>
+          
+          <div class="letter-peek" id="letterPeek">
+            <span id="letterPeekTo">To: My Love 💌</span>
+          </div>
+
+          <!-- Clickable Wax Seal -->
+          <div class="wax-seal" id="waxSeal" title="Click to open the letter">
+            <span class="seal-icon">❤️</span>
+          </div>
+        </div>
+      </div>
+      <div class="envelope-instruction" id="envelopeHint">
+        <span>💌</span> Tap the wax seal to open
+      </div>
+    </section>
+
+    <!-- STAGE 2: Confession Letter Modal with Typewriter Animation -->
+    <section class="letter-section" id="letterSection">
+      <div class="letter-decor-top">
+        <span class="stamp">💌</span>
+        <span class="date-text" id="letterDate"></span>
+      </div>
+
+      <h2 class="greeting-text" id="letterGreeting">Dear Love,</h2>
       
-      <div class="creator-header">
-        <span class="badge-tag">✨ Romantic Website Generator</span>
-        <h1>Create a Custom Confession Website</h1>
-        <p class="subtitle">Fill in the details below to generate a live romantic website & unique link for your crush!</p>
+      <div class="typewriter-content" id="typewriterContent"></div>
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+        <button class="skip-btn" id="skipTypewriter">Skip to end ⏩</button>
+        <button class="continue-btn" id="continueToExperience" style="display: none;">
+          Continue Reading ✨ <span>↓</span>
+        </button>
       </div>
+    </section>
 
-      <!-- Step Progress Bar -->
-      <div class="wizard-steps">
-        <div class="step-item active" data-step="1">
-          <span class="step-num">1</span>
-          <span class="step-name">Names</span>
-        </div>
-        <div class="step-item" data-step="2">
-          <span class="step-num">2</span>
-          <span class="step-name">Date & Question</span>
-        </div>
-        <div class="step-item" data-step="3">
-          <span class="step-num">3</span>
-          <span class="step-name">Letter</span>
-        </div>
-        <div class="step-item" data-step="4">
-          <span class="step-num">4</span>
-          <span class="step-name">Photos</span>
-        </div>
-        <div class="step-item" data-step="5">
-          <span class="step-num">5</span>
-          <span class="step-name">Finish</span>
-        </div>
-      </div>
+    <!-- EXPERIENCE FLOW (Revealed after letter) -->
+    <div class="experience-flow" id="experienceFlow">
 
-      <form id="wizardForm" onsubmit="return false;">
+      <!-- STAGE 3: Live Love Counter -->
+      <section class="counter-section" id="counterSection">
+        <div class="counter-container">
+          <h3 class="section-subtitle" id="counterTitle" style="margin-bottom: 0;">Time Since You Stole My Heart ❤️</h3>
+          <div class="counter-grid">
+            <div class="counter-box">
+              <span class="counter-number" id="countDays">0</span>
+              <span class="counter-label">Days</span>
+            </div>
+            <div class="counter-box">
+              <span class="counter-number" id="countHours">0</span>
+              <span class="counter-label">Hours</span>
+            </div>
+            <div class="counter-box">
+              <span class="counter-number" id="countMins">0</span>
+              <span class="counter-label">Minutes</span>
+            </div>
+            <div class="counter-box">
+              <span class="counter-number" id="countSecs">0</span>
+              <span class="counter-label">Seconds</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STAGE 4: Polaroid Memory Gallery -->
+      <section class="polaroids-section" id="polaroidsSection">
+        <h3 class="section-subtitle" id="polaroidsTitle">Moments & Little Memories 📸</h3>
+        <div class="polaroids-grid" id="polaroidsGrid">
+          <!-- Injected via JavaScript from CONFIG -->
+        </div>
+      </section>
+
+      <!-- STAGE 5: Reasons Why You're Special Cards -->
+      <section class="reasons-section" id="reasonsSection">
+        <h3 class="section-subtitle" id="reasonsTitle">A Few Reasons Why You're Unforgettable</h3>
+        <div class="reasons-grid" id="reasonsGrid">
+          <!-- Injected via JavaScript from CONFIG -->
+        </div>
+      </section>
+
+      <!-- STAGE 6: Mini-Quiz -->
+      <section class="quiz-section" id="quizSection">
+        <span class="quiz-progress" id="quizProgress">Question 1 of 3</span>
+        <h3 class="section-subtitle" id="quizTitle" style="margin-bottom: 5px;">The Love Mini-Quiz 🎮</h3>
+        <p style="color: var(--rose-gold); font-size: 0.95rem; margin-bottom: 20px;" id="quizSubtitle">
+          Answer these 3 quick questions to see how well our hearts match!
+        </p>
+
+        <div class="quiz-question-box">
+          <div class="quiz-q-text" id="quizQuestionText">Loading question...</div>
+          <div class="quiz-options-list" id="quizOptionsList"></div>
+          <div class="quiz-feedback" id="quizFeedback"></div>
+        </div>
+      </section>
+
+      <!-- STAGE 7: Proposal Section (Runaway No & Glowing YES) -->
+      <section class="proposal-section" id="proposalSection">
+        <h2 class="proposal-question" id="proposalQuestion">Will you spend the rest of your life with me?</h2>
+        <p class="proposal-sub">Choose carefully 😉</p>
         
-        <!-- STEP 1: NAMES -->
-        <div class="form-step-page active" data-step="1">
-          <h3>💕 Step 1: Who is this for?</h3>
-
-          <div class="form-group">
-            <label>Crush / Partner's Name *</label>
-            <input type="text" id="partnerName" placeholder="e.g. Alex, Sophia, Emma..." required>
-          </div>
-
-          <div class="form-group">
-            <label>Your Name / Nickname *</label>
-            <input type="text" id="senderName" placeholder="e.g. Sam, Chris, Yours Truly..." required>
-          </div>
-
-          <div class="step-nav-buttons">
-            <div></div>
-            <button type="button" class="gradient-btn next-step-btn" data-next="2">Next Step →</button>
-          </div>
+        <div class="buttons-arena">
+          <button class="btn-yes" id="btnYes">YES! 🥰</button>
+          <button class="btn-no" id="btnNo">No 🙈</button>
         </div>
 
-        <!-- STEP 2: DATE & PROPOSAL QUESTION -->
-        <div class="form-step-page" data-step="2">
-          <h3>📅 Step 2: Special Date & Proposal</h3>
+        <div class="tease-message" id="teaseMessage"></div>
+      </section>
 
-          <div class="form-group">
-            <label>First Met / Together Date (For Live Counter Timer) *</label>
-            <input type="date" id="firstMetDate" required>
-          </div>
+    </div>
 
-          <div class="form-group">
-            <label>Proposal Question *</label>
-            <input type="text" id="proposalQuestion" placeholder="e.g. Will you spend the rest of your life with me?" required>
-          </div>
+  </main>
 
-          <div class="form-group">
-            <label>Date Planner Title (After Proposal Acceptance)</label>
-            <input type="text" id="dateHeader" placeholder="e.g. Now... Let's Plan Another Unforgettable Day Together! 🎟️">
-          </div>
+  <!-- STAGE 8: Celebration Overlay with Date Planner & Golden Ticket -->
+  <div class="celebration-overlay" id="celebrationOverlay">
+    <div class="celebration-card">
+      <div class="celebration-icon">💖✨🎉</div>
+      <h2 class="celebration-title" id="celebrationTitle">YAY! You Made My Entire Universe! 🎉💖</h2>
+      <p class="celebration-text" id="celebrationText">
+        This is the happiest moment ever! I promise to always cherish you, make you laugh, and be there for you through everything.
+      </p>
+      <div class="celebration-signature" id="celebrationSignature">Forever with all my love ❤️</div>
 
-          <div class="step-nav-buttons">
-            <button type="button" class="glass-btn prev-step-btn" data-prev="1">← Back</button>
-            <button type="button" class="gradient-btn next-step-btn" data-next="3">Next Step →</button>
-          </div>
+      <!-- Plan Our First Date Interactive Widget -->
+      <div class="date-planner-box" id="datePlannerBox">
+        <h3 style="font-family: var(--font-heading); color: #fcd34d; font-size: 1.4rem;">
+          Now... Let's Plan Another Unforgettable Day Together! 🎟️
+        </h3>
+        <p style="font-size: 0.95rem; color: #ffdbe4; margin-top: 5px;">
+          Pick the adventure that sounds most fun to you:
+        </p>
+
+        <div class="date-activities-grid" id="dateActivitiesGrid">
+          <!-- Populated from CONFIG -->
         </div>
 
-        <!-- STEP 3: CONFESSION LETTER -->
-        <div class="form-step-page" data-step="3">
-          <h3>📜 Step 3: Your Heartfelt Letter</h3>
-
-          <div class="form-group">
-            <label>Letter Title</label>
-            <input type="text" id="letterTitle" placeholder="e.g. Written in the Stars ✨">
-          </div>
-
-          <div class="form-group">
-            <label>Confession Letter Body *</label>
-            <textarea id="letterBody" rows="6" placeholder="Write your heartfelt confession letter here..." required></textarea>
-          </div>
-
-          <div class="step-nav-buttons">
-            <button type="button" class="glass-btn prev-step-btn" data-prev="2">← Back</button>
-            <button type="button" class="gradient-btn next-step-btn" data-next="4">Next Step →</button>
-          </div>
+        <div class="date-input-group">
+          <label for="chosenDateInput">Pick a special day:</label>
+          <input type="date" id="chosenDateInput" class="romantic-date-input">
         </div>
 
-        <!-- STEP 4: PHOTOS -->
-        <div class="form-step-page" data-step="4">
-          <h3>📸 Step 4: Memory Photo Gallery</h3>
-          <p class="form-desc">Upload photo files or paste image URLs for the Polaroid Gallery.</p>
+        <button class="btn-generate-ticket" id="btnGenerateTicket">
+          ✨ Claim Our Official Date Ticket ✨
+        </button>
 
-          <div class="photo-inputs-grid">
-            <div class="photo-input-card">
-              <label>Photo 1</label>
-              <input type="file" id="filePhoto1" accept="image/*" class="file-photo-input">
-              <input type="text" id="urlPhoto1" placeholder="Or paste image URL">
-              <input type="text" id="capPhoto1" placeholder="Caption 1 (e.g. Our first met ✨)">
+        <!-- Golden Boarding Pass / Ticket Result -->
+        <div class="ticket-wrapper" id="ticketWrapper">
+          <div class="golden-ticket" id="goldenTicketDisplay">
+            <div class="ticket-header">
+              <span class="ticket-brand">GOLDEN PASS ✦ VIP</span>
+              <span class="ticket-type">DATE VOUCHER</span>
             </div>
-            <div class="photo-input-card">
-              <label>Photo 2</label>
-              <input type="file" id="filePhoto2" accept="image/*" class="file-photo-input">
-              <input type="text" id="urlPhoto2" placeholder="Or paste image URL">
-              <input type="text" id="capPhoto2" placeholder="Caption 2 (e.g. Your beautiful smile 😊)">
-            </div>
-            <div class="photo-input-card">
-              <label>Photo 3</label>
-              <input type="file" id="filePhoto3" accept="image/*" class="file-photo-input">
-              <input type="text" id="urlPhoto3" placeholder="Or paste image URL">
-              <input type="text" id="capPhoto3" placeholder="Caption 3 (e.g. Magical moments 💫)">
-            </div>
-            <div class="photo-input-card">
-              <label>Photo 4</label>
-              <input type="file" id="filePhoto4" accept="image/*" class="file-photo-input">
-              <input type="text" id="urlPhoto4" placeholder="Or paste image URL">
-              <input type="text" id="capPhoto4" placeholder="Caption 4 (e.g. Forever my favorite 💖)">
+            <div class="ticket-body">
+              <div>
+                <div class="ticket-field">
+                  <div class="ticket-field-label">Passengers</div>
+                  <div class="ticket-field-val" id="ticketPassengers">Secret Admirer & Love</div>
+                </div>
+                <div class="ticket-field">
+                  <div class="ticket-field-label">Destination / Date Activity</div>
+                  <div class="ticket-field-val" id="ticketActivity">Cozy Coffee & Deep Talks ☕</div>
+                </div>
+                <div class="ticket-field">
+                  <div class="ticket-field-label">Valid Date</div>
+                  <div class="ticket-field-val" id="ticketDateText">Anytime You Want!</div>
+                </div>
+              </div>
+              <div class="ticket-barcode">
+                <div class="barcode-lines">||| | | |||| | |||</div>
+                <div style="font-size: 0.7rem; color: #fcd34d; margin-top: 6px; letter-spacing: 1px;">
+                  VALID FOR UNLIMITED HUGS & SMILES
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="step-nav-buttons">
-            <button type="button" class="glass-btn prev-step-btn" data-prev="3">← Back</button>
-            <button type="button" class="gradient-btn next-step-btn" data-next="5">Next Step →</button>
-          </div>
+          <button class="btn-download-ticket" id="btnDownloadTicket">
+            📥 Save Ticket to Gallery (PNG)
+          </button>
         </div>
-
-        <!-- STEP 5: FINISH & GENERATE LINK -->
-        <div class="form-step-page" data-step="5">
-          <h3>🎉 Step 5: Ready to Share!</h3>
-          <p class="form-desc">Your custom website is ready! Preview it live, copy the unique shareable link for your crush, or download a standalone ZIP package.</p>
-
-          <div class="action-buttons-row">
-            <button type="button" id="previewSiteBtn" class="gradient-btn lg">
-              <span>✨ Preview Live Website</span>
-            </button>
-            <button type="button" id="copyShareLinkBtn" class="glass-btn lg">
-              <span>🔗 Copy Unique Shareable Link</span>
-            </button>
-            <button type="button" id="downloadZipBtn" class="glass-btn lg">
-              <span>📦 Download Standalone ZIP</span>
-            </button>
-          </div>
-
-          <div class="step-nav-buttons margin-top">
-            <button type="button" class="glass-btn prev-step-btn" data-prev="4">← Back</button>
-          </div>
-        </div>
-
-      </form>
-
+      </div>
     </div>
   </div>
 
-
-  <!-- ==========================================================================
-       VIEW 2: PERSONALIZED ROMANTIC WEBSITE (For Crush / When Shared Link Opened)
-       ========================================================================== -->
-  <div id="crushView" class="view-wrapper hidden">
-    
-    <!-- Floating Audio Control -->
-    <button id="audioToggleBtn" class="floating-audio-btn" title="Toggle Music">
-      <span id="audioIcon">🎵</span>
-    </button>
-
-    <!-- Floating Creator Button -->
-    <button id="floatingCreateBtn" class="floating-create-btn">
-      <span>✨ Make Yours</span>
-    </button>
-
-    <main class="romantic-container">
+  <!-- BUILDER MODAL: Interactive Customizer for Users -->
+  <div class="builder-modal" id="builderModal">
+    <div class="builder-modal-card">
+      <button class="builder-close-btn" id="closeBuilderBtn">&times;</button>
       
-      <!-- HERO CARD & LIVE TIMER -->
-      <section class="romantic-section glass-panel text-center">
-        <div class="glow-orb nebula-pink"></div>
-        <div class="glow-orb nebula-gold"></div>
+      <div class="builder-header">
+        <h2>✨ Create a Website for Your Crush</h2>
+        <p>Enter your details below to generate a live custom site & shareable link!</p>
+      </div>
 
-        <span class="badge-tag gold">💖 A Special Message For You</span>
-        <h1 class="main-hero-title">For <span id="crushPartnerName" class="glow-text">Your Name</span></h1>
-        <p class="hero-subtext">"Every moment with you shines brighter than all the stars in the universe."</p>
-
-        <!-- Live Love Timer -->
-        <div class="timer-box">
-          <h4 class="timer-label">Counting Every Second Of Our Togetherness ✨</h4>
-          <div class="timer-grid">
-            <div class="timer-card"><span id="crushYears">0</span><label>Years</label></div>
-            <div class="timer-card"><span id="crushDays">000</span><label>Days</label></div>
-            <div class="timer-card"><span id="crushHours">00</span><label>Hours</label></div>
-            <div class="timer-card"><span id="crushMins">00</span><label>Mins</label></div>
-            <div class="timer-card"><span id="crushSecs">00</span><label>Secs</label></div>
+      <form id="builderForm" class="builder-form" onsubmit="return false;">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="inputCrushName">Crush / Partner's Name 💕</label>
+            <input type="text" id="inputCrushName" placeholder="e.g. Alex, Sophia, Emma" required>
           </div>
-          <p class="timer-since-text">Since <span id="crushFirstMetDate">Special Date</span> 💖</p>
-        </div>
-      </section>
-
-      <!-- ENVELOPE & LETTER -->
-      <section class="romantic-section glass-panel">
-        <div class="section-title-box text-center">
-          <span class="badge-tag">📜 From The Heart</span>
-          <h2 id="crushLetterTitle">Written in the Stars ✨</h2>
-        </div>
-
-        <div class="envelope-wrapper">
-          <div id="romanticEnvelope" class="space-envelope">
-            <div class="envelope-seal">💌</div>
-            <p class="envelope-prompt">Tap to open letter ✨</p>
-          </div>
-
-          <div id="romanticLetterPaper" class="letter-paper glass-card hidden">
-            <div class="letter-header-decor">✨ 💖 ✨</div>
-            <p id="crushLetterBody" class="letter-body-text"></p>
-            <div class="letter-sig-box">
-              <p>Forever Yours,</p>
-              <h3 id="crushSenderName" class="sig-name">Your Name</h3>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- POLAROID PHOTO GALLERY -->
-      <section class="romantic-section glass-panel">
-        <div class="section-title-box text-center">
-          <span class="badge-tag">📸 Precious Memories</span>
-          <h2>Captured Moments</h2>
-        </div>
-
-        <div id="crushPhotoGrid" class="polaroid-gallery-grid">
-          <!-- Dynamically populated photo cards -->
-        </div>
-      </section>
-
-      <!-- THE PROPOSAL QUESTION -->
-      <section class="romantic-section glass-panel text-center">
-        <div class="proposal-box">
-          <div class="ring-emoji">💍</div>
-          <span class="badge-tag gold">✨ The Eternal Question</span>
-          <h1 id="crushProposalQuestion" class="proposal-question-title">
-            Will you spend the rest of your life with me?
-          </h1>
-
-          <div class="proposal-btn-group">
-            <button id="yesBtn" class="gradient-btn xl glow-pulse">
-              <span>YES! FOREVER 💖</span>
-            </button>
-            <button id="noBtn" class="glass-btn lg">
-              <span>No 🙈</span>
-            </button>
+          <div class="form-group">
+            <label for="inputYourName">Your Name / Nickname 💌</label>
+            <input type="text" id="inputYourName" placeholder="e.g. Sam, Chris, Yours Truly" required>
           </div>
         </div>
 
-        <!-- Success Date Planner -->
-        <div id="successPanel" class="success-panel glass-card hidden">
-          <div class="success-header">
-            <span class="celebrate-emoji">🎉✨🌌</span>
-            <h2>You Made Me The Happiest Person Ever!</h2>
-            <p id="crushDateHeader" class="date-planner-subtitle">
-              Now... Let's Plan Another Unforgettable Day Together! 🎟️
-            </p>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="inputStartDate">Special Date (First Met / Together) 📅</label>
+            <input type="date" id="inputStartDate" required>
           </div>
-
-          <div id="crushDateGrid" class="date-ideas-grid">
-            <!-- Dynamically populated date ideas -->
+          <div class="form-group">
+            <label for="inputProposal">Proposal Question 💍</label>
+            <input type="text" id="inputProposal" placeholder="e.g. Will you spend the rest of your life with me?">
           </div>
+        </div>
 
-          <button id="confirmDateBtn" class="gradient-btn lg">
-            <span>Lock In Our Dream Date 💖</span>
+        <div class="form-group">
+          <label for="inputLetterText">Confession Letter (Paragraphs separated by new lines) 📜</label>
+          <textarea id="inputLetterText" rows="4" placeholder="Write your heartfelt message here..."></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="inputPhoto1">Photo 1 URL (Optional)</label>
+            <input type="text" id="inputPhoto1" placeholder="https://...">
+          </div>
+          <div class="form-group">
+            <label for="inputPhoto2">Photo 2 URL (Optional)</label>
+            <input type="text" id="inputPhoto2" placeholder="https://...">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="inputPhoto3">Photo 3 URL (Optional)</label>
+            <input type="text" id="inputPhoto3" placeholder="https://...">
+          </div>
+          <div class="form-group">
+            <label for="inputPhoto4">Photo 4 URL (Optional)</label>
+            <input type="text" id="inputPhoto4" placeholder="https://...">
+          </div>
+        </div>
+
+        <div class="builder-actions">
+          <button type="button" class="btn-builder-action" id="btnPreviewSite" style="background: var(--primary-pink); color: #fff;">
+            ✨ Preview Live Website
+          </button>
+          <button type="button" class="btn-builder-action btn-copy-link" id="btnCopyShareLink">
+            🔗 Copy Shareable Link
+          </button>
+          <button type="button" class="btn-builder-action btn-download-zip" id="btnDownloadZip">
+            📦 Download Custom Website (ZIP)
           </button>
         </div>
-
-      </section>
-
-    </main>
-
+      </form>
+    </div>
   </div>
 
-  <!-- Toast Notification -->
-  <div id="toast" class="toast hidden">
-    <span id="toastText">Notification text</span>
-  </div>
+  <!-- Copy Notification Toast -->
+  <div class="toast-notification" id="toastNotification">Link copied to clipboard! 📋✨</div>
+
+  <!-- Hidden Canvas for Golden Ticket PNG Export -->
+  <canvas id="ticketExportCanvas" width="900" height="420" style="display: none;"></canvas>
 
   <!-- Scripts -->
-  <script src="script.js?v=50"></script>
+  <script src="config.js?v=60"></script>
+  <script src="script.js?v=60"></script>
 </body>
 </html>
